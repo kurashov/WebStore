@@ -8,7 +8,7 @@
     <title>@ViewBag.Title</title>
 </head>
 <body>
-<h1>Сотрудники</h1>
+<h3>Сотрудники</h3>
 <hr/>
 <table>
     <thead>
@@ -19,6 +19,7 @@
         <th>Отчество</th>
         <th>Дата рождения</th>
         <th>Возраст</th>
+        <th></th>
     </tr>
     </thead>
     
@@ -32,6 +33,7 @@
                 <td>@employee.Patronymic</td>
                 <td>@employee.BirthDateTime.ToShortDateString()</td>
                 <td>@employee.Age</td>
+                <td><a href="/Home/EmployeeDetails/@employee.Id">Инфо.</a></td>
             </tr>
         }
     </tbody>
