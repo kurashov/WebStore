@@ -11,5 +11,6 @@ namespace WebStore.Controllers
         public IActionResult Index() => View();
         public IActionResult Blog() => View();
         public IActionResult BlogSingle() => View();
+        public IActionResult Cart() => View();
     }
 }
