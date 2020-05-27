@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace WebStore
 {
@@ -18,9 +13,10 @@ namespace WebStore
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
+                .ConfigureAppConfiguration( opt => opt.AddXmlFile("CustomConfig.xml", true, true) )
+                .ConfigureWebHostDefaults(host =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    host.UseStartup<Startup>();
                 });
     }
 }
