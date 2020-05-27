@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Employee>
+
+@{
+    ViewData["Title"] = "Список сотрудников";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th>Отчество</th>
+            <th>Дата рождения</th>
+            <th>Возраст</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach( var emploee in Model )
+        {
+            <tr>
+                <td>@emploee.Id</td>
+                <td>@emploee.Surname</td>
+                <td>@emploee.Name</td>
+                <td>@emploee.Patronymic</td>
+                <td>@emploee.BirthDateTime.ToShortDateString()</td>
+                <td>@emploee.Age</td>
+                <td><a asp-controller="Employees" asp-action="EmployeeDetails" asp-route-id="@emploee.Id">Информация</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
