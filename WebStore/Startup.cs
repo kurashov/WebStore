@@ -35,6 +35,8 @@ namespace WebStore
 
             app.UseRouting();
 
+            app.UseWelcomePage( "/Welcome" );
+
             app.UseEndpoints(endpoints =>
             {
                 //config routing
