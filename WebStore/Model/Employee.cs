@@ -16,7 +16,5 @@ namespace WebStore.Model
         public DateTime BirthDateTime { get; set; }
 
         public int Age => (int) Math.Floor( ( DateTime.Now - BirthDateTime ).TotalDays / 365.25 );
-
-        public DateTime DateOfEmployment { get; set; }
     }
 }
