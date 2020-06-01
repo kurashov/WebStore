@@ -1,0 +1,57 @@
+﻿@model WebStore.ViewModels.EmployeeViewModel
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h3>Вы уверены, что хоитите удалить этого сотрудника?</h3>
+    <div>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Id)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Id)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Surname)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Surname)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Patronymic)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Patronymic)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.BirthDateTime)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.BirthDateTime)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Age)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Age)
+            </dd>
+        </dl>
+    
+        <form asp-action="DeleteConfirmed" asp-route-id="@Model.Id">
+            <input type="submit" value="Удалить сотрудника" class="btn btn-default" /> |
+            <a asp-action="Index">К списку сотрудников</a>
+        </form>
+    </div>
+
+</div>
