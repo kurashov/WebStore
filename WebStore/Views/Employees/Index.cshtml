@@ -6,31 +6,24 @@
 }
 
 <div class="container">
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Id</th>
-            <th>Фамилия</th>
-            <th>Имя</th>
-            <th>Отчество</th>
-            <th>Дата рождения</th>
-            <th>Возраст</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach( var emploee in Model )
+    <hr />
+    <a asp-action = "Edit" class = "btn btn-success" > Добавить </a>
+    <hr/>
+    <table class = "table table-bordered">
+        @foreach ( var item in Model)
         {
             <tr>
-                <td>@emploee.Id</td>
-                <td>@emploee.Surname</td>
-                <td>@emploee.Name</td>
-                <td>@emploee.Patronymic</td>
-                <td>@emploee.BirthDateTime.ToShortDateString()</td>
-                <td>@emploee.Age</td>
-                <td><a asp-controller="Employees" asp-action="EmployeeDetails" asp-route-id="@emploee.Id">Информация</a></td>
+                <td><a asp-action = "Edit" asp-route-id = "@item.Id" ><i class = "fa
+fa-edit" ></i></a></td>
+                <td> @item.Name </td>
+                <td> @item.Surname </td>
+                <td> @item.Patronymic </td>
+                <td> @item.Age </td>
+                <td><a asp-action = "EmployeeDetails"
+                       asp-route-id = "@item.Id" > Детали </a></td>
+                <td><a asp-action = "Delete" asp-route-id = "@item.Id" ><i class = "fa
+fa-cut" ></i></a></td>
             </tr>
         }
-        </tbody>
     </table>
 </div>

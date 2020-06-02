@@ -1,54 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using WebStore.Infrastructure.Interfaces;
 using WebStore.Model;
+using WebStore.ViewModels;
 
 namespace WebStore.Controllers
 {
     public class EmployeesController : Controller
     {
-        private readonly List<Employee> _employees;
+        private readonly IEmployeesData _employeesData;
 
-        public EmployeesController()
+        public EmployeesController( IEmployeesData employeesData )
         {
-            _employees = new List<Employee>()
-            {
-                new Employee
-                {
-                    Id = 1,
-                    Surname = "Иванов",
-                    Name = "Иван",
-                    Patronymic = "Иванович",
-                    BirthDateTime = new DateTime( 1960, 1, 1 )
-                },
-                new Employee
-                {
-                    Id = 2,
-                    Surname = "Петров",
-                    Name = "Петр",
-                    Patronymic = "Петрович",
-                    BirthDateTime = new DateTime( 1970, 2, 2 )
-                },
-                new Employee
-                {
-                    Id = 3,
-                    Surname = "Сидоров",
-                    Name = "Сидр",
-                    Patronymic = "Сидорович",
-                    BirthDateTime = new DateTime( 1980, 3, 3 )
-                }
-            };
+            _employeesData = employeesData;
         }
 
         public IActionResult Index()
         {
-            return View(_employees);
+            return View(_employeesData.Get());
         }
 
         public IActionResult EmployeeDetails(int id)
         {
-            var employee = _employees.FirstOrDefault(e => e.Id == id);
+            var employee = _employeesData.GetById( id );
             if (employee == null)
             {
                 return NotFound();
@@ -56,8 +30,110 @@ namespace WebStore.Controllers
 
             ViewBag.Title = "Информация о сотруднике";
 
-            return View(employee);
+            var employeeVm = new EmployeeViewModel
+            {
+                Id = employee.Id,
+                Surname = employee.Surname,
+                Name = employee.Name,
+                Patronymic = employee.Patronymic,
+                BirthDateTime = employee.BirthDateTime,
+                Age = employee.Age
+            };
+
+            return View(employeeVm);
         }
 
+        public IActionResult Edit( int? id )
+        {
+            if( id is null )
+            {
+                return View( new EmployeeViewModel() );
+            }
+
+            if( id < 0 )
+            {
+                return BadRequest();
+            }
+
+            var employee = _employeesData.GetById( id.Value );
+
+            if( employee is null )
+            {
+                return NotFound();
+            }
+
+            return View(new EmployeeViewModel
+            {
+                Id = employee.Id,
+                Surname = employee.Surname,
+                Name = employee.Name,
+                Patronymic = employee.Patronymic,
+                BirthDateTime = employee.BirthDateTime
+            });
+        }
+
+        [HttpPost]
+        public IActionResult Edit( EmployeeViewModel viewModel )
+        {
+            if (viewModel is null)
+            {
+                throw new ArgumentNullException( nameof(viewModel) );
+            }
+
+            var employee = new Employee
+            {
+                Id = viewModel.Id,
+                Surname = viewModel.Surname,
+                Name = viewModel.Name,
+                Patronymic = viewModel.Patronymic,
+                BirthDateTime = viewModel.BirthDateTime
+            };
+
+            if (employee.Id == 0 )
+            {
+                _employeesData.Add( employee );
+            }
+            else
+            {
+                _employeesData.Edit( employee );
+            }
+
+            _employeesData.Commit();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Delete( int id )
+        {
+            if( id <= 0 )
+            {
+                return BadRequest();
+            }
+
+            var employee = _employeesData.GetById( id );
+            if( employee is null )
+            {
+                return NotFound();
+            }
+
+            return View( new EmployeeViewModel
+            {
+                Id = employee.Id,
+                Surname = employee.Surname,
+                Name = employee.Name,
+                Patronymic = employee.Patronymic,
+                BirthDateTime = employee.BirthDateTime,
+                Age = employee.Age
+            } );
+        }
+
+        [HttpPost]
+        public IActionResult DeleteConfirmed( int id )
+        {
+            _employeesData.Delete( id );
+            _employeesData.Commit();
+
+            return RedirectToAction( nameof(Index) );
+        }
     }
 }
