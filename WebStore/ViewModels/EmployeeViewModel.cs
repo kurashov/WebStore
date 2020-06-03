@@ -26,10 +26,11 @@ namespace WebStore.ViewModels
         public int Id { get; set; }
 
         [DisplayName( "Фамилия" )]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Имя не может быть пустым")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Фамилия не может быть пустым")]
         public string Surname { get; set; }
 
         [DisplayName( "Имя" )]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Имя не может быть пустым")]
         public string Name { get; set; }
 
         [DisplayName( "Отчество" )] 

@@ -35,21 +35,23 @@ namespace WebStore.Controllers
             return View(employeeVm);
         }
 
-        public IActionResult Edit( int? id )
+        #region Edit
+
+        public IActionResult Edit(int? id)
         {
-            if( id is null )
+            if (id is null)
             {
-                return View( new EmployeeViewModel() );
+                return View(new EmployeeViewModel());
             }
 
-            if( id < 0 )
+            if (id < 0)
             {
                 return BadRequest();
             }
 
-            var employee = _employeesData.GetById( id.Value );
+            var employee = _employeesData.GetById(id.Value);
 
-            if( employee is null )
+            if (employee is null)
             {
                 return NotFound();
             }
@@ -58,11 +60,16 @@ namespace WebStore.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit( EmployeeViewModel viewModel )
+        public IActionResult Edit(EmployeeViewModel viewModel)
         {
             if (viewModel is null)
             {
-                throw new ArgumentNullException( nameof(viewModel) );
+                throw new ArgumentNullException(nameof(viewModel));
+            }
+
+            if( !ModelState.IsValid )
+            {
+                return View( viewModel );
             }
 
             var employee = new Employee
@@ -74,13 +81,13 @@ namespace WebStore.Controllers
                 BirthDateTime = viewModel.BirthDateTime
             };
 
-            if (employee.Id == 0 )
+            if (employee.Id == 0)
             {
-                _employeesData.Add( employee );
+                _employeesData.Add(employee);
             }
             else
             {
-                _employeesData.Edit( employee );
+                _employeesData.Edit(employee);
             }
 
             _employeesData.Commit();
@@ -88,29 +95,35 @@ namespace WebStore.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete( int id )
+        #endregion
+
+        #region Delete
+
+        public IActionResult Delete(int id)
         {
-            if( id <= 0 )
+            if (id <= 0)
             {
                 return BadRequest();
             }
 
-            var employee = _employeesData.GetById( id );
-            if( employee is null )
+            var employee = _employeesData.GetById(id);
+            if (employee is null)
             {
                 return NotFound();
             }
 
-            return View( new EmployeeViewModel (employee));
+            return View(new EmployeeViewModel(employee));
         }
 
         [HttpPost]
-        public IActionResult DeleteConfirmed( int id )
+        public IActionResult DeleteConfirmed(int id)
         {
-            _employeesData.Delete( id );
+            _employeesData.Delete(id);
             _employeesData.Commit();
 
-            return RedirectToAction( nameof(Index) );
+            return RedirectToAction(nameof(Index));
         }
+
+        #endregion
     }
 }
