@@ -30,15 +30,7 @@ namespace WebStore.Controllers
 
             ViewBag.Title = "Информация о сотруднике";
 
-            var employeeVm = new EmployeeViewModel
-            {
-                Id = employee.Id,
-                Surname = employee.Surname,
-                Name = employee.Name,
-                Patronymic = employee.Patronymic,
-                BirthDateTime = employee.BirthDateTime,
-                Age = employee.Age
-            };
+            var employeeVm = new EmployeeViewModel( employee );
 
             return View(employeeVm);
         }
@@ -62,14 +54,7 @@ namespace WebStore.Controllers
                 return NotFound();
             }
 
-            return View(new EmployeeViewModel
-            {
-                Id = employee.Id,
-                Surname = employee.Surname,
-                Name = employee.Name,
-                Patronymic = employee.Patronymic,
-                BirthDateTime = employee.BirthDateTime
-            });
+            return View(new EmployeeViewModel(employee));
         }
 
         [HttpPost]
@@ -116,15 +101,7 @@ namespace WebStore.Controllers
                 return NotFound();
             }
 
-            return View( new EmployeeViewModel
-            {
-                Id = employee.Id,
-                Surname = employee.Surname,
-                Name = employee.Name,
-                Patronymic = employee.Patronymic,
-                BirthDateTime = employee.BirthDateTime,
-                Age = employee.Age
-            } );
+            return View( new EmployeeViewModel (employee));
         }
 
         [HttpPost]
