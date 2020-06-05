@@ -1,8 +1,4 @@
-﻿
-@{
-    ViewData["Title"] = "Shop";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+﻿@model CatalogViewModel
 
 <section id="advertisement">
     <div class="container">
@@ -14,11 +10,11 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-3">
-                <partial name="Partial/_LeftSideBar"/>
+                <partial name="Partial/_LeftSideBar" />
             </div>
 
             <div class="col-sm-9 padding-right">
-                <partial name="Partial/Shop/_FeaturesItems"/>
+                <partial name="Partial/Shop/_FeaturesItems" model="@Model.Products" />
             </div>
         </div>
     </div>

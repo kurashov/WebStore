@@ -22,7 +22,9 @@ namespace WebStore
             //add MVC infrastructure 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
+            //add services in DI container
             services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
+            services.AddSingleton<IProductData, InMemoryProductData>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
