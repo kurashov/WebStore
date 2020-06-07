@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebStore.DAL.Contexts;
 using WebStore.Infrastructure.Interfaces;
 using WebStore.Infrastructure.Services;
 
@@ -19,6 +21,10 @@ namespace WebStore
 
         public void ConfigureServices(IServiceCollection services)
         {
+            //add DbContext
+            services.AddDbContext<WebStoreDbContext>( opt =>
+                 opt.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
+
             //add MVC infrastructure 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
