@@ -5,8 +5,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebStore.DAL.Contexts;
+using WebStore.Data;
 using WebStore.Infrastructure.Interfaces;
-using WebStore.Infrastructure.Services;
+using WebStore.Infrastructure.Services.InDataBase;
+using WebStore.Infrastructure.Services.InMemory;
 
 namespace WebStore
 {
@@ -30,11 +32,15 @@ namespace WebStore
 
             //add services in DI container
             services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
-            services.AddSingleton<IProductData, InMemoryProductData>();
+            //services.AddSingleton<IProductData, InMemoryProductData>();
+            services.AddScoped<IProductData, InDataBaseProductData>();
+            services.AddTransient<DbInitializer>();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbInitializer dbInitializer)
         {
+            dbInitializer.Initialize();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -47,7 +53,7 @@ namespace WebStore
 
             app.UseRouting();
 
-            app.UseWelcomePage( "/Welcome" );
+            //app.UseWelcomePage( "/Welcome" );
 
             app.UseEndpoints(endpoints =>
             {
