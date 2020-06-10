@@ -1,4 +1,6 @@
-﻿<partial name="Partial/_Slyder" />
+﻿@model IEnumerable<ProductViewModel>
+
+<partial name="Partial/_Slyder" />
 
 <section>
     <div class="container">
@@ -8,7 +10,7 @@
             </div>
 
             <div class="col-sm-9 padding-right">
-                <partial name="Partial/_FeaturesItems" />
+                <partial name="Partial/_FeaturesItems" model="@Model"/>
 
                 <partial name="Partial/_CategoryTab"/>
 
