@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
+using WebStore.Domain.Entities;
 using WebStore.Infrastructure.Interfaces;
-using WebStore.Model;
 using WebStore.ViewModels;
 
 namespace WebStore.Controllers
@@ -90,7 +90,7 @@ namespace WebStore.Controllers
                 _employeesData.Edit(employee);
             }
 
-            _employeesData.Commit();
+            _employeesData.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
@@ -119,7 +119,7 @@ namespace WebStore.Controllers
         public IActionResult DeleteConfirmed(int id)
         {
             _employeesData.Delete(id);
-            _employeesData.Commit();
+            _employeesData.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }

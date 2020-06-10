@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using WebStore.Model;
+using WebStore.Domain.Entities;
 
 namespace WebStore.ViewModels
 {

@@ -28,6 +28,20 @@ namespace WebStore.Data
 
             db.Migrate();
 
+            if( !_dbContext.Employees.Any() )
+            {
+                using( var transaction = db.BeginTransaction() )
+                {
+                    foreach( var employee in TestData.Employees )
+                    {
+                        employee.Id = 0;
+                        _dbContext.Add( employee );
+                    }
+                    _dbContext.SaveChanges();
+                    transaction.Commit();
+                }
+            }
+
             if( _dbContext.Products.Any() )
             {
                 return;
@@ -35,34 +49,34 @@ namespace WebStore.Data
 
             using (var transaction = db.BeginTransaction())
             {
-                _dbContext.Sections.AddRange(TestData.Sections);
-
-                db.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Sections] ON");
+                foreach( var section in TestData.Sections )
+                {
+                    section.Id = 0;
+                    _dbContext.Sections.Add( section );
+                }
                 _dbContext.SaveChanges();
-                db.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Sections] OFF");
-
                 transaction.Commit();
             }
 
             using (var transaction = db.BeginTransaction())
             {
-                _dbContext.Brands.AddRange(TestData.Brands);
-
-                db.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Brands] ON");
+                foreach( var brand in TestData.Brands )
+                {
+                    brand.Id = 0;
+                    _dbContext.Brands.Add( brand );
+                }
                 _dbContext.SaveChanges();
-                db.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Brands] OFF");
-
                 transaction.Commit();
             }
 
             using (var transaction = db.BeginTransaction())
             {
-                _dbContext.Products.AddRange(TestData.Products);
-
-                db.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Products] ON");
+                foreach( var product in TestData.Products )
+                {
+                    product.Id = 0;
+                    _dbContext.Products.Add( product );
+                }
                 _dbContext.SaveChanges();
-                db.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Products] OFF");
-
                 transaction.Commit();
             }
 

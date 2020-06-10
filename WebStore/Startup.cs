@@ -28,12 +28,14 @@ namespace WebStore
                  opt.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
 
             //add MVC infrastructure 
-            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddControllersWithViews()
+                .AddRazorRuntimeCompilation();
 
             //add services in DI container
-            services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
+            //services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
             //services.AddSingleton<IProductData, InMemoryProductData>();
             services.AddScoped<IProductData, InDataBaseProductData>();
+            services.AddScoped<IEmployeesData, InDataBaseEmployeesData>();
             services.AddTransient<DbInitializer>();
         }
 
