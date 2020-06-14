@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WebStore.Domain.Entities;
+using WebStore.Domain.Entities.Identity;
 
 namespace WebStore.DAL.Contexts
 {
-    public class WebStoreDbContext : DbContext
+    public class WebStoreDbContext : IdentityDbContext<User, Role, string>
     {
         public WebStoreDbContext( DbContextOptions<WebStoreDbContext> options) : base(options)
         {
