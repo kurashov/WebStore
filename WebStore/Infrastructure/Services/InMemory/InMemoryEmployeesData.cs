@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using WebStore.Data;
+using WebStore.Domain.Entities;
 using WebStore.Infrastructure.Interfaces;
-using WebStore.Model;
 
 namespace WebStore.Infrastructure.Services.InMemory
 {
@@ -73,7 +73,7 @@ namespace WebStore.Infrastructure.Services.InMemory
             return _employees.Remove( dbItem );
         }
 
-        public void Commit()
+        public void SaveChanges()
         {
             //do nothing
         }

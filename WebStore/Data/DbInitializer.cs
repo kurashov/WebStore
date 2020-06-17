@@ -28,42 +28,64 @@ namespace WebStore.Data
 
             db.Migrate();
 
+            if( !_dbContext.Employees.Any() )
+            {
+                using( var transaction = db.BeginTransaction() )
+                {
+                    foreach( var employee in TestData.Employees )
+                    {
+                        employee.Id = 0;
+                        _dbContext.Add( employee );
+                    }
+                    _dbContext.SaveChanges();
+                    transaction.Commit();
+                }
+            }
+
             if( _dbContext.Products.Any() )
             {
                 return;
             }
 
-            using (var transaction = db.BeginTransaction())
+            foreach (var childSection in TestData.Sections.Where(s => s.ParentId != null))
+            {
+                childSection.ParentSection = TestData.Sections.Single(s => s.Id == childSection.Id);
+                childSection.ParentId = null;
+            }
+
+            foreach (var section in TestData.Sections)
+            {
+                var sectionProducts = TestData.Products.Where(p => p.SectionId == section.Id).ToList();
+                sectionProducts.ForEach(p =>
+                {
+                    p.SectionId = 0;
+                    p.Section = section;
+                });
+                section.Products = sectionProducts;
+                section.Id = 0;
+            }
+
+            foreach (var brand in TestData.Brands)
+            {
+                var brandProducts = TestData.Products.Where(p => p.BrandId == brand.Id).ToList();
+                brandProducts.ForEach(p =>
+                {
+                    p.BrandId = null;
+                    p.Brand = brand;
+                });
+                brand.Products = brandProducts;
+                brand.Id = 0;
+            }
+
+            foreach (var product in TestData.Products) product.Id = 0;
+
+            using (db.BeginTransaction())
             {
                 _dbContext.Sections.AddRange(TestData.Sections);
-
-                db.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Sections] ON");
-                _dbContext.SaveChanges();
-                db.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Sections] OFF");
-
-                transaction.Commit();
-            }
-
-            using (var transaction = db.BeginTransaction())
-            {
                 _dbContext.Brands.AddRange(TestData.Brands);
-
-                db.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Brands] ON");
-                _dbContext.SaveChanges();
-                db.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Brands] OFF");
-
-                transaction.Commit();
-            }
-
-            using (var transaction = db.BeginTransaction())
-            {
                 _dbContext.Products.AddRange(TestData.Products);
-
-                db.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Products] ON");
                 _dbContext.SaveChanges();
-                db.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Products] OFF");
-
-                transaction.Commit();
+                db.CommitTransaction();
             }
 
         }

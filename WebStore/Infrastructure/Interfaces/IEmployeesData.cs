@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using WebStore.Model;
+using WebStore.Domain.Entities;
 
 namespace WebStore.Infrastructure.Interfaces
 {
@@ -15,6 +15,6 @@ namespace WebStore.Infrastructure.Interfaces
 
         bool Delete( int id );
 
-        void Commit();
+        void SaveChanges();
     }
 }
