@@ -47,37 +47,45 @@ namespace WebStore.Data
                 return;
             }
 
-            using (var transaction = db.BeginTransaction())
+            foreach (var childSection in TestData.Sections.Where(s => s.ParentId != null))
             {
-                foreach( var section in TestData.Sections )
-                {
-                    section.Id = 0;
-                    _dbContext.Sections.Add( section );
-                }
-                _dbContext.SaveChanges();
-                transaction.Commit();
+                childSection.ParentSection = TestData.Sections.Single(s => s.Id == childSection.Id);
+                childSection.ParentId = null;
             }
 
-            using (var transaction = db.BeginTransaction())
+            foreach (var section in TestData.Sections)
             {
-                foreach( var brand in TestData.Brands )
+                var sectionProducts = TestData.Products.Where(p => p.SectionId == section.Id).ToList();
+                sectionProducts.ForEach(p =>
                 {
-                    brand.Id = 0;
-                    _dbContext.Brands.Add( brand );
-                }
-                _dbContext.SaveChanges();
-                transaction.Commit();
+                    p.SectionId = 0;
+                    p.Section = section;
+                });
+                section.Products = sectionProducts;
+                section.Id = 0;
             }
 
-            using (var transaction = db.BeginTransaction())
+            foreach (var brand in TestData.Brands)
             {
-                foreach( var product in TestData.Products )
+                var brandProducts = TestData.Products.Where(p => p.BrandId == brand.Id).ToList();
+                brandProducts.ForEach(p =>
                 {
-                    product.Id = 0;
-                    _dbContext.Products.Add( product );
-                }
+                    p.BrandId = null;
+                    p.Brand = brand;
+                });
+                brand.Products = brandProducts;
+                brand.Id = 0;
+            }
+
+            foreach (var product in TestData.Products) product.Id = 0;
+
+            using (db.BeginTransaction())
+            {
+                _dbContext.Sections.AddRange(TestData.Sections);
+                _dbContext.Brands.AddRange(TestData.Brands);
+                _dbContext.Products.AddRange(TestData.Products);
                 _dbContext.SaveChanges();
-                transaction.Commit();
+                db.CommitTransaction();
             }
 
         }
