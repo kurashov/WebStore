@@ -36,11 +36,8 @@ namespace WebStore.Controllers
             var registrationResult = await _userManager.CreateAsync(user, model.Password);
             if (registrationResult.Succeeded)
             {
-                var addToRoleTask = _userManager.AddToRoleAsync( user, Role.User );
-                var signInTask = _signInManager.SignInAsync(user, false);
-
-                addToRoleTask.Wait();
-                signInTask.Wait();
+                await _userManager.AddToRoleAsync( user, Role.User );
+                await _signInManager.SignInAsync(user, false);
 
                 return RedirectToAction("Index", "Home");
             }
