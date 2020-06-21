@@ -2,7 +2,7 @@
 using System.Linq;
 using WebStore.Data;
 using WebStore.Domain.Entities;
-using WebStore.Infrastructure.Interfaces;
+using WebStore.Infrastructure.Contracts;
 
 namespace WebStore.Infrastructure.Services.InMemory
 {

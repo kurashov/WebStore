@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Domain.Entities;
 using WebStore.Domain.Entities.Identity;
-using WebStore.Infrastructure.Interfaces;
+using WebStore.Infrastructure.Contracts;
 using WebStore.ViewModels;
 
 namespace WebStore.Controllers
