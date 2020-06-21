@@ -92,6 +92,7 @@ namespace WebStore
             app.UseDefaultFiles();
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseRouting();
 
@@ -106,5 +107,6 @@ namespace WebStore
                 );
             });
         }
+
     }
 }
