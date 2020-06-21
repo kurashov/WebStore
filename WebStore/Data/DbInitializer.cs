@@ -38,32 +38,24 @@ namespace WebStore.Data
 
             db.Migrate();
 
-            var initializeIdentityTask = InitializeIdentityAsync();
+            InitializeIdentityAsync().Wait();
 
             InitializeEmployees( db );
 
             InitializeProducts( db );
-            
-            initializeIdentityTask.Wait();
         }
 
         private async Task InitializeIdentityAsync()
         {
-            Task<IdentityResult> createAdminRoleTask = null;
-            Task<IdentityResult> createUserRoleTask = null;
-
             if( !await _roleManager.RoleExistsAsync( Role.Administrator ) )
             {
-                createAdminRoleTask = _roleManager.CreateAsync( new Role( Role.Administrator ) );
+                await _roleManager.CreateAsync( new Role( Role.Administrator ) );
             }
 
             if( !await _roleManager.RoleExistsAsync( Role.User ) )
             {
-                createUserRoleTask = _roleManager.CreateAsync( new Role( Role.User ) );
+                await _roleManager.CreateAsync( new Role( Role.User ) );
             }
-
-            createAdminRoleTask?.Wait();
-            createUserRoleTask?.Wait();
 
             if (await _userManager.FindByNameAsync( User.Admin ) is null)
             {
@@ -89,45 +81,42 @@ namespace WebStore.Data
                 return;
             }
 
-            foreach( var childSection in TestData.Sections.Where( s => s.ParentId != null ) )
+            if (_dbContext.Products.Any())
             {
-                childSection.ParentSection = TestData.Sections.Single( s => s.Id == childSection.Id );
-                childSection.ParentId = null;
+                return;
             }
 
-            foreach( var section in TestData.Sections )
+            using (var transaction = db.BeginTransaction())
             {
-                var sectionProducts = TestData.Products.Where( p => p.SectionId == section.Id ).ToList();
-                sectionProducts.ForEach( p =>
-                {
-                    p.SectionId = 0;
-                    p.Section = section;
-                } );
-                section.Products = sectionProducts;
-                section.Id = 0;
-            }
+                _dbContext.Sections.AddRange(TestData.Sections);
 
-            foreach( var brand in TestData.Brands )
-            {
-                var brandProducts = TestData.Products.Where( p => p.BrandId == brand.Id ).ToList();
-                brandProducts.ForEach( p =>
-                {
-                    p.BrandId = null;
-                    p.Brand = brand;
-                } );
-                brand.Products = brandProducts;
-                brand.Id = 0;
-            }
-
-            foreach( var product in TestData.Products ) product.Id = 0;
-
-            using( db.BeginTransaction() )
-            {
-                _dbContext.Sections.AddRange( TestData.Sections );
-                _dbContext.Brands.AddRange( TestData.Brands );
-                _dbContext.Products.AddRange( TestData.Products );
+                db.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Sections] ON");
                 _dbContext.SaveChanges();
-                db.CommitTransaction();
+                db.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Sections] OFF");
+
+                transaction.Commit();
+            }
+
+            using (var transaction = db.BeginTransaction())
+            {
+                _dbContext.Brands.AddRange(TestData.Brands);
+
+                db.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Brands] ON");
+                _dbContext.SaveChanges();
+                db.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Brands] OFF");
+
+                transaction.Commit();
+            }
+
+            using (var transaction = db.BeginTransaction())
+            {
+                _dbContext.Products.AddRange(TestData.Products);
+
+                db.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Products] ON");
+                _dbContext.SaveChanges();
+                db.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Products] OFF");
+
+                transaction.Commit();
             }
         }
 

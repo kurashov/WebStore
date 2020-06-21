@@ -91,10 +91,10 @@ namespace WebStore
             app.UseStaticFiles();
             app.UseDefaultFiles();
 
+            app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseRouting();
 
             //app.UseWelcomePage( "/Welcome" );
 

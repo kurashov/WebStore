@@ -14,8 +14,7 @@
     "inputFiles": [
       "wwwroot/js/gmaps.js",
       "wwwroot/js/main.js",
-      "wwwroot/js/price-range.js",
-      "wwwroot/js/jquery.js"
+      "wwwroot/js/price-range.js"
     ],
     "minify": {
       "enabled": true,
