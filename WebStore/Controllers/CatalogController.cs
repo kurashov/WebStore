@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Domain.Entities;
 using WebStore.Infrastructure.Interfaces;
+using WebStore.Infrastructure.Mapping;
 using WebStore.ViewModels;
 
 namespace WebStore.Controllers
@@ -22,12 +23,20 @@ namespace WebStore.Controllers
                 Select(p => new ProductViewModel(p)).
                 OrderBy(p => p.Order).
                 ToList();
+
             return View(new CatalogViewModel(sectionId, brandId, products));
         }
 
-        public IActionResult ProductDetails()
+        public IActionResult ProductDetails( int id )
         {
-            return View();
+            var product = _productData.GetProductById( id );
+
+            if( product is null )
+            {
+                return NotFound();
+            }
+
+            return View( product.ToViewModel() );
         }
     }
 }

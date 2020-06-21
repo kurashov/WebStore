@@ -35,5 +35,10 @@ namespace WebStore.Infrastructure.Services.InDataBase
 
             return result;
         }
+
+        public Product GetProductById( int id )
+        {
+            return _dbContext.Products.Find( id );
+        }
     }
 }
