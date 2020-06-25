@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using WebStore.DAL.Contexts;
 using WebStore.Domain.Entities;
-using WebStore.Infrastructure.Interfaces;
+using WebStore.Infrastructure.Contracts;
 
 namespace WebStore.Infrastructure.Services.InDataBase
 {

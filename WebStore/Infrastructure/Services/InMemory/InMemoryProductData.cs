@@ -2,7 +2,7 @@
 using System.Linq;
 using WebStore.Data;
 using WebStore.Domain.Entities;
-using WebStore.Infrastructure.Interfaces;
+using WebStore.Infrastructure.Contracts;
 
 namespace WebStore.Infrastructure.Services.InMemory
 {
@@ -25,6 +25,11 @@ namespace WebStore.Infrastructure.Services.InMemory
             }
 
             return result;
+        }
+
+        public Product GetProductById( int id )
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

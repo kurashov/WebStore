@@ -4,6 +4,10 @@ namespace WebStore.ViewModels
 {
     public class ProductViewModel
     {
+        public ProductViewModel()
+        {
+            
+        }
         public ProductViewModel( Product product )
         {
             Id = product.Id;

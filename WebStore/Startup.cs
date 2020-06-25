@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -9,9 +9,9 @@ using Microsoft.Extensions.Hosting;
 using WebStore.DAL.Contexts;
 using WebStore.Data;
 using WebStore.Domain.Entities.Identity;
-using WebStore.Infrastructure.Interfaces;
+using WebStore.Infrastructure.Contracts;
+using WebStore.Infrastructure.Services.InCookies;
 using WebStore.Infrastructure.Services.InDataBase;
-using WebStore.Infrastructure.Services.InMemory;
 
 namespace WebStore
 {
@@ -75,6 +75,8 @@ namespace WebStore
             //services.AddSingleton<IProductData, InMemoryProductData>();
             services.AddScoped<IProductData, InDataBaseProductData>();
             services.AddScoped<IEmployeesData, InDataBaseEmployeesData>();
+            services.AddScoped<ICartService, InCookiesCartService>();
+
             services.AddTransient<DbInitializer>();
         }
 
@@ -92,9 +94,10 @@ namespace WebStore
             app.UseStaticFiles();
             app.UseDefaultFiles();
 
-            app.UseAuthentication();
-
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             //app.UseWelcomePage( "/Welcome" );
 
@@ -107,5 +110,6 @@ namespace WebStore
                 );
             });
         }
+
     }
 }

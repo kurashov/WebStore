@@ -2,7 +2,7 @@
 using System.Linq;
 using WebStore.DAL.Contexts;
 using WebStore.Domain.Entities;
-using WebStore.Infrastructure.Interfaces;
+using WebStore.Infrastructure.Contracts;
 
 namespace WebStore.Infrastructure.Services.InDataBase
 {
@@ -34,6 +34,11 @@ namespace WebStore.Infrastructure.Services.InDataBase
             }
 
             return result;
+        }
+
+        public Product GetProductById( int id )
+        {
+            return _dbContext.Products.Find( id );
         }
     }
 }

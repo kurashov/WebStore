@@ -31,15 +31,14 @@ namespace WebStore.Controllers
                 return View(model);
             }
 
-            var user = new User
-            {
-                UserName = model.UserName
-            };
+            var user = new User( model.UserName );
 
             var registrationResult = await _userManager.CreateAsync(user, model.Password);
             if (registrationResult.Succeeded)
             {
+                await _userManager.AddToRoleAsync( user, Role.User );
                 await _signInManager.SignInAsync(user, false);
+
                 return RedirectToAction("Index", "Home");
             }
 
